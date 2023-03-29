@@ -1,8 +1,0 @@
-pandas
-numpy
-streamlit
-matplotlib
-plotly.express
-plotly.graph_objs
-plotly.subplots
-yfinance
