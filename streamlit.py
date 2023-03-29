@@ -225,7 +225,7 @@ def page_sectores():
         # Establecer el tamaño del gráfico y el título principal
     fig.update_layout(height=1300, width=950, title='Precios de los sectores del S&P500')
     # Mostrar el gráfico
-    st.header('Grafico de los sectores durante los ultimos 23 años.')
+    st.header('Grafico de los sectores durante los ultimos 5 años.')
     st.plotly_chart(fig)
 
 
