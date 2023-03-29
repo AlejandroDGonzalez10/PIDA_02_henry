@@ -39,5 +39,7 @@ El análisis del mercado bursátil de SP500 permite dar un contexto de la situac
 + El reporte financiero de recomendacion de encuentra en el archivo Reportefinanciero
 
 
-# Archivos dataframe utilizado no logrado subir: https://drive.google.com/file/d/1SLDaTMhaJJxYRQQMhcv6tIIihnVN76DJ/view?usp=share_link
-# Dashboard :https://alejandrodgonzalez10-pida-02-streamlit-hsi22y.streamlit.app/
+# Archivos dataframe utilizado no logrado subir:
+https://drive.google.com/file/d/1SLDaTMhaJJxYRQQMhcv6tIIihnVN76DJ/view?usp=share_link
+# Dashboard :
+https://alejandrodgonzalez10-pida-02-streamlit-hsi22y.streamlit.app/
