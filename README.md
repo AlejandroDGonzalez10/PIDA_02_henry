@@ -36,6 +36,8 @@ Tomamos un enfoque investigatorio analistico del comercio historico del indice S
 # **Conclusiones**
 El análisis del mercado bursátil de SP500 permite dar un contexto de la situación actual y generar recomendaciones de inversión para un perfil de inversor y tiempo especifico. El dashboard y los KPIs permiten visualizar de forma clara la información relevante y tomar decisiones en base a las recomendaciones pertinentes por el equitipo de finanza pudiendo recomendar el portafocio, nivel de riesgo y tiempo para inveriones futuras de la empresa a continuacion de deja un infome del analisis y conclusion detallada para la toma de desiciones.
 
++ El reporte financiero de recomendacion de encuentra en el archivo Reportefinanciero
+
 
 # Archivos dataframe utilizados:
 # Dashboard :
