@@ -38,4 +38,4 @@ El análisis del mercado bursátil de SP500 permite dar un contexto de la situac
 
 
 # Archivos dataframe utilizados:
-# Dashboar :
+# Dashboard :
