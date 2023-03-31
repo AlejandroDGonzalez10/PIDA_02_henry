@@ -143,7 +143,7 @@ def page_sectores():
             '\n- XLB: Materiales'
             '\n- XLU: Servicios públicos')
 
-    st.header('Catidad de empresas por sector')
+    st.header('Cantidad de empresas por sector')
     sector=pd.read_csv('areas_sec.csv')
     sectores = sector['Sector'].value_counts()
     count_by_sector = sector.groupby('Sector')['Simbolo'].count()
