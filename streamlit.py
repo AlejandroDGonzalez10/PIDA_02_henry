@@ -21,7 +21,7 @@ def page_inicio():
 
 
     spx500=pd.read_csv('stock_price.csv')
-    st.header('Este es un grafico lineal del indice donde podemos obsevar su comercio en los ultumos 23 años.')
+    st.header('Este es un grafico lineal del indice donde podemos obsevar su comercio en los ultimos 23 años.')
 
 
 
