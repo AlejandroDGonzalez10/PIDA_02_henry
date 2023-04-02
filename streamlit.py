@@ -12,16 +12,16 @@ def page_inicio():
 
     st.title('''Dashboard sobre el indice S&P500 ''')
     st.image('https://s.yimg.com/ny/api/res/1.2/NgGh9XXtdYa6yo4_Al2TpA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTM2MA--/https://media.zenfs.com/en/gobankingrates_644/68d66d621e2a960154454e2caff2da12')
-    st.subheader('Veremos un analisis sobre este indice bursatil y recomendaciones de inversiones.')
+    st.subheader('Veremos un análisis sobre este índice bursátil y recomendaciones de inversiones.')
 
-    st.subheader('INDICE S&P500 ')
-    st.write('El S&P 500 es un índice bursátil que mide el rendimiento de 500 empresas líderes en los Estados Unidos, incluyendo algunas de las compañías más grandes y exitosas de EE.UU Como un indicador amplio del mercado de valores, fue creado en 1957.')
+    st.subheader('ÍNDICE S&P 500')
+    st.write('El S&P 500 es un índice bursátil que mide el rendimiento de 500 empresas líderes en los Estados Unidos, incluyendo algunas de las compañías más grandes y exitosas de EE.UU. Como un indicador amplio del mercado de valores, fue creado en 1957.')
     st.write('El índice se calcula utilizando una metodología de capitalización de mercado, lo que significa que el valor de cada empresa en el índice se pondera en función de su capitalización bursátil total. Esto asegura que las empresas más grandes tengan un mayor impacto en el índice que las empresas más pequeñas.')
-    st.write(' ** El S&P500 es uno de los mas importantes indices bursatiles pero no es el unico, tenemos tambien el NASDAQ 100, DOW JONES, entre otros. ** ')
+    st.write('**El S&P 500 es uno de los índices bursátiles más importantes, pero no es el único. También tenemos el NASDAQ 100, DOW JONES, entre otros.**')
 
 
-    spx500=pd.read_csv('stock_price.csv')
-    st.header('Este es un grafico lineal del indice donde podemos obsevar su comercio en los ultimos 23 años.')
+    spx500 = pd.read_csv('stock_price.csv')
+    st.header('Este es un gráfico lineal del índice donde podemos observar su comercio en los últimos 23 años.')
 
 
 
@@ -34,15 +34,15 @@ def page_inicio():
         yaxis_title='Cierre de Precio'
     )
     fig.update_traces(hovertemplate='Fecha: %{x} <br>Cierre de Precio: %{y}')
-    fig.update_layout(title='Grafico del S&P 500')
+    fig.update_layout(title='Gráfico del S&P 500')
     st.plotly_chart(fig)
 
 
-    st.write('El S&P500 en su trayectoria en los 23 años tu tendencia alcista con un crecimiento del 865%, desde el 2000 a la actualidad.')
+    st.write('El S&P 500 ha tenido una tendencia alcista en su trayectoria de los últimos 23 años, con un crecimiento del 865%, desde el año 2000 hasta la actualidad.')
     #----------------------------------------------------------------------------------------------------------
-    # Logica del codigo.
-    st.header('Este es un grafico de barras donde vemos el retorno anual del indice a lo largo de los años.')
-    st.write('Cada barra es el retorno de ese año, las barras por debajo del cero son negativas para ese año y las barras por arriba del cero son positivas para dicho año.')
+    # Lógica del código.
+    st.header('Este es un gráfico de barras donde vemos el retorno anual del índice a lo largo de los años.')
+    st.write('Cada barra representa el retorno de ese año. Las barras por debajo de cero son negativas para ese año, mientras que las barras por encima de cero son positivas para dicho año.')
 
     df=spx500
     df['Date'] = pd.to_datetime(df['Date'])
@@ -77,48 +77,52 @@ def page_inicio():
     fig.update_layout(title='Retornos Diarios por año', xaxis_title='Año', yaxis_title='Retorno Anual')
     st.plotly_chart(fig)
 
-    #----------------------------------------------------------------------------------------------------------- 
-    # Logica del codigo.
-    st.header('Suma de retornos positivos y negativos en los 23 años')
+    st.header('Suma de retornos positivos y negativos en los últimos 23 años')
 
-    spx500_df=pd.read_csv('stock_price.csv')
+    # Leer los datos de precios de acciones
+    spx500_df = pd.read_csv('stock_price.csv')
+    # Convertir la columna "Date" a formato de fecha y usarla como índice
     spx500_df['Date'] = pd.to_datetime(spx500_df['Date'])
     spx500_df.set_index('Date', inplace=True)
     # Calcular el rendimiento diario
     spx500_df['Daily Return'] = spx500_df['Adj Close'].pct_change()
-    # Agrupar los datos por año y calcular el rendimiento anual
-    annual_returns = spx500_df['Daily Return']*100
-    annual_returns = spx500_df['Daily Return'].groupby(pd.Grouper(freq='Y')).apply(lambda x: (1 + x).prod() - 1)
-    # Convertir annual_returns en un DataFrame
-    annual_returns_df = pd.DataFrame(annual_returns)
-    # Agregar una columna con el año correspondiente a cada rendimiento anual
-    annual_returns_df['Year'] = annual_returns.index.year
-    annual_returns_df.rename(columns={'Daily Return': 'Anual Return'}, inplace=True)
-    annual_returns = annual_returns_df['Anual Return'].groupby(annual_returns_df.index.year).sum()
-    # Obtener la suma de los rendimientos anuales positivos y negativos
-    positive_returns_sum = annual_returns[annual_returns > 0].sum()
-    negative_returns_sum = annual_returns[annual_returns < 0].sum()
+    # Calcular el rendimiento anual
+    annual_returns = spx500_df['Daily Return'].groupby(pd.Grouper(freq='Y')).apply(lambda x: (1 + x).prod() - 1) * 100
+    # Crear un DataFrame con los rendimientos anuales y el año correspondiente
+    annual_returns_df = pd.DataFrame({'Anual Return': annual_returns, 'Year': annual_returns.index.year})
+    # Sumar los rendimientos anuales positivos y negativos
+    positive_returns_sum = annual_returns_df[annual_returns_df['Anual Return'] > 0]['Anual Return'].sum()
+    negative_returns_sum = annual_returns_df[annual_returns_df['Anual Return'] < 0]['Anual Return'].sum()
+
+    # Mostrar los resultados
+    st.write(f"La suma de los retornos anuales positivos en los últimos 23 años es: {positive_returns_sum:.2f}%")
+    st.write(f"La suma de los retornos anuales negativos en los últimos 23 años es: {negative_returns_sum:.2f}%")
+
 
 
     st.subheader('Suma de los rendimientos anuales positivos:')
-    st.header('286.863 %')
+    st.header('286.863%')
     st.subheader('Suma de los rendimientos anuales negativos:')
     st.header('-101.73%')
-    #Grafico
 
+    # Gráfico
     # Crear un DataFrame para los datos del gráfico de torta
     pie_data = pd.DataFrame({'Tipo de retorno': ['Retornos Positivos', 'Retornos Negativos'],
-                            'Retorno acumulado': [positive_returns_sum, abs(negative_returns_sum)]})
+                             'Retorno acumulado': [positive_returns_sum, abs(negative_returns_sum)]})
     # Crear el gráfico de torta
     fig = go.Figure(data=[go.Pie(labels=pie_data['Tipo de retorno'], 
-                                hole=0.4,
-                                values=pie_data['Retorno acumulado'],
-                                marker_colors=['green', 'red'])])
+                                 hole=0.4,
+                                 values=pie_data['Retorno acumulado'],
+                                 marker_colors=['green', 'red'])])
     # Personalizar la figura
-    fig.update_layout(title={'text': 'Retornos Anuales del S&P500 desde el año 2000 calculado en un 100%','y': 0.95,'x': 0.5,'xanchor': 'center','yanchor': 'top'},
-        width=800,
-        height=600,
-        template='simple_white')
+    fig.update_layout(title={'text': 'Retornos Anuales del S&P 500 desde el año 2000 calculado en un 100%',
+                              'y': 0.95,
+                              'x': 0.5,
+                              'xanchor': 'center',
+                              'yanchor': 'top'},
+                      width=800,
+                      height=600,
+                      template='simple_white')
     # Mostrar la figura en Streamlit
     st.plotly_chart(fig)
 
@@ -150,7 +154,7 @@ def page_sectores():
     fig = px.bar(sectores, x=sectores.index, y=sectores.values)
     fig.update_traces(hovertemplate='<b>Sector: %{x}</b><br>Cantidad: %{y}')
     fig.update_layout(xaxis={'title': 'Sector'},
-                    yaxis={'title': 'Frecuencia numero de empresas de cada sector'},
+                    yaxis={'title': 'Frecuencia cantidad de empresas de cada sector'},
                     title='Distribución de sectores del SP500',
                     height=500, width=800)
     st.plotly_chart(fig)
@@ -173,7 +177,7 @@ def page_sectores():
     sectors_data.columns = sectors_data.columns.map(sectors_names)
     sectors_data = sectors_data.dropna()
 
-    st.header('Profit de sectores durante promedio desde el 2000 hasta la actualidad')
+    st.header('Beneficios de los sectores en promedio desde el año 2000 hasta la actualidad')
     
     # Calcular las ganancias de cada sector
     sector_gains = {}
@@ -202,7 +206,7 @@ def page_sectores():
                     title='Ganancias de los sectores del SPY500 desde el año 2000',
                     height=500, width=900)
 
-    st.header('Grafico Porcentual de las ganancias promedio por sector desde el 2000.')
+    st.header('Gráfico porcentual de las ganancias promedio por sector desde el año 2000')
     # Mostrar el gráfico
     st.plotly_chart(fig)
 
@@ -227,16 +231,16 @@ def page_sectores():
     # Establecer el tamaño del gráfico y el título principal
     fig.update_layout(height=1300, width=900, title='Precios de los sectores')
 
-    st.title('Grafico de precios de los ultimos 5 anos de cada sector del S&P500')
+    st.title('Gráfico de precios de los últimos 5 años de cada sector del S&P 500')
     # Mostrar el gráfico
     st.plotly_chart(fig)
 
 
 
 def page_empresas():
-    st.title('Empresas Recomendadas')
+    st.title('Empresas recomendadas')
     st.header('Empresas elegidas para invertir')
-    st.subheader('Top 10 Empresas del sector Tecnologico y S&P500 en general con mayor rendimientos en 23 años:')
+    st.subheader('Top 10 empresas del sector tecnológico y S&P 500 en general con mayor rendimiento en los últimos 23 años:')
     data_tec = {
     'Empresa': ['AAPL', 'ANSS', 'CTSH', 'APH', 'LRCX', 'ADBE', 'TYL', 'QCOM', 'FICO', 'ROP'],
     'Rendimiento': [51021.26, 11445.60, 10018.50, 9448.09, 8971.02, 5963.59, 5391.33, 5363.42, 5127.35, 5017.41]
@@ -271,7 +275,7 @@ def page_empresas():
     gains = ((colempresa.iloc[-1] - colempresa.iloc[0]) / colempresa.iloc[0]) * 100
     top_10tec = gains.nlargest(10)
 
-    st.header ('Retornos anuales de top 10 empresas tecnologica ')
+    st.header('Retornos anuales de las 10 mejores empresas tecnológicas')
     # Crear el gráfico de barras
     fig = px.bar(top_10tec, y=top_10tec.values, x=top_10tec.index, 
                 color=top_10tec.values, color_continuous_scale='Blues',
@@ -343,7 +347,7 @@ def page_empresas():
     # Establecer el tamaño del gráfico y el título principal
     fig.update_layout(height=1300, width=900, title='Precios de las empresas recomendadas')
 
-    st.title('Grafico de precios de los 23 años de las empresas seleccionadas')
+    st.title('Gráfico de precios de los 23 años de las empresas seleccionadas')
     # Mostrar el gráfico
     st.plotly_chart(fig)
 
@@ -354,7 +358,7 @@ def page_empresas():
 
 def page_kpis():
     st.title('Analisis KPIS Margen de beneficio')
-    st.header(' Este Kpis nos sirve para tener un concepto mas claro del margen que podemos obtener con estas empresas recomendadas')
+    st.header('Este KPI nos sirve para tener un concepto más claro del margen que podemos obtener con estas empresas recomendadas')
     # Descargar datos históricos de precios de AAPL desde Yahoo Finance
     df = yf.download('AAPL', start='2010-01-01', end='2023-03-27')
 
@@ -453,7 +457,7 @@ def page_kpis():
 
 #----------------------------------KPIS 2 AAPL ----------------------------------------------------------
     st.title('Analisis KPIS BETA')
-    st.header(' Este Kpis nos sirve medir o ver mejor el nivel de riesgo que puede tener invertir en cada enpresa por su relacion con la volatilidad del mercado, en este caso las 4 son moderadas con riesgo bajos.')
+    st.header('Este KPI nos sirve para medir o ver mejor el nivel de riesgo que puede tener invertir en cada empresa por su relación con la volatilidad del mercado. En este caso, las 4 son moderadas con riesgos bajos.')
 
 
    # Descargar datos históricos de AAPL
@@ -472,7 +476,7 @@ def page_kpis():
 
     # Crear un dashboard en Streamlit
     st.title('Análisis de AAPL')
-    st.write('Tenemos un BETA bajo es decir que su volatilidad en relacion con el S&P500 es moderada baja lo que es ideal para reducir el riesgo del portafolio recomendado.')
+    st.write('Tenemos un BETA bajo, es decir que su volatilidad en relación con el S&P 500 es moderadamente baja, lo que es ideal para reducir el riesgo del portafolio recomendado.')
     st.header('Beta (mensual por 5 años)	1.30')
     st.header(f'Beta promedio 23 años: {beta:.2f}')
     st.plotly_chart(fig)
@@ -492,7 +496,7 @@ def page_kpis():
 
     # Crear un dashboard en Streamlit
     st.title('Análisis de ANSS')
-    st.write('Tenemos un BETA bajo es decir que su volatilidad en relacion con el S&P500 en moderada baja lo que es ideal para reducir el riesgo del portafolio recomendado.')
+    st.write('Tenemos un BETA bajo, es decir que su volatilidad en relación con el S&P 500 es moderadamente baja, lo que es ideal para reducir el riesgo del portafolio recomendado.')
     st.header('Beta (mensual por 5 años)	1.24')
     st.header(f'Beta promedio 23 años: {beta:.2f}')
     st.plotly_chart(fig)
@@ -512,7 +516,7 @@ def page_kpis():
 
     # Crear un dashboard en Streamlit
     st.title('Análisis de CTSH')
-    st.write('Tenemos un BETA bajo es decir que su volatilidad en relacion con el S&P500 en moderada baja lo que es ideal para reducir el riesgo del portafolio recomendado.')
+    st.write('Tenemos un BETA bajo, es decir que su volatilidad en relación con el S&P 500 es moderadamente baja, lo que es ideal para reducir el riesgo del portafolio recomendado.')
     st.header('Beta (mensual por 5 años)	1.11')
     st.header(f'Beta promedio 23 años: {beta:.2f}')
     st.plotly_chart(fig)
@@ -532,7 +536,7 @@ def page_kpis():
 
     # Crear un dashboard en Streamlit
     st.title('Análisis de MNST')
-    st.write('Tenemos un BETA bajo es decir que su volatilidad en relacion con el S&P500 en moderada baja lo que es ideal para reducir el riesgo del portafolio recomendado.')
+    st.write('Tenemos un BETA bajo, es decir que su volatilidad en relación con el S&P 500 es moderadamente baja, lo que es ideal para reducir el riesgo del portafolio recomendado.')
     st.header('Beta (mensual por 5 años)	0.87')
     st.header(f'Beta promedio 23 años: {beta:.2f}')
     st.plotly_chart(fig)
@@ -540,7 +544,7 @@ def page_kpis():
 #----------------------------- kPIS 3 AAPL--------------------------------------------------
     
     st.title('Analisis KPIS Dividendo pagados')
-    st.header(' Este Kpis nos muestra los dividendo pagados por las empresas en un calculo por cierres de precios de los activos')
+    st.header('Este KPI nos muestra los dividendos pagados por las empresas en un cálculo por cierre de precios de los activos')
     # Calcular el dividendo pagado
     aapl["Dividend Paid"] = aapl["Close"].diff() + aapl["Adj Close"].diff()
     aapl["Dividend Paid"] = aapl["Dividend Paid"].apply(lambda x: x if x > 0 else 0)
@@ -553,7 +557,7 @@ def page_kpis():
     }, index=[0])
 
     # Mostrar la tabla de resumen en el dashboard
-    st.write("## Dividendos pagados (KPIs) de AAPL")
+    st.write("## Dividendos pagados (KPI) de AAPL")
     st.write("Última rentabilidad de dividendos anuales 0.57%")
     st.write('Proyección de dividendo y rentabilidad	0.92 (0.58%)')
     st.write(dividend_summary)
@@ -636,10 +640,10 @@ def page_kpis():
     st.plotly_chart(dividend_chart)
 
 def page_conclusion():
-    st.header('El equipo de analisis y finanza concluyo que lo  mejor para la empresa es recomendar diversificar su portafolio de inversiones en 5 activos siendo el principal el indice S&P500 con un rendimiento anual promedio del 8%, segun los ultimos años, y en 4 empresas que mas alla que corresponden tambien al S&P500 se analizo que son de alto rendimiento con bajo nivel de riesgo esto hace un equilibrio perfecto para el crecimiento de capital invertido sin tanta especulacion de sus rendimientos anuales y poder calcular y proyectar un ibjetivo de retorno o ganancias.')
+    st.header('El equipo de análisis y finanzas concluyó que lo mejor para la empresa es recomendar diversificar su cartera de inversiones en 5 activos, siendo el principal el índice S&P 500 con un rendimiento anual promedio del 8%, según los últimos años. Además, se analizó que 4 empresas que pertenecen al S&P 500 tienen un alto rendimiento con bajo nivel de riesgo, lo que crea un equilibrio perfecto para el crecimiento del capital invertido sin tanta especulación en sus rendimientos anuales. Esto permite calcular y proyectar un objetivo de retorno o ganancias.')
     
     
-    st.header ('La recomendacion del equipo es que la inversion sea de minimo 5 año para poder obetner un total del 15%, anual promediando todos los activos juntos')
+    st.header('La recomendación del equipo es que la inversión sea de mínimo 5 años para poder obtener un total del 15%, anual promediando todos los activos juntos.')
 
  
 # Crear un cuadro de selección con varias opciones
