@@ -219,15 +219,17 @@ def page_sectores():
         sector_data = sectors_data[sector]
                 # Agregar un trazado de líneas al subplot correspondiente
         fig.add_trace(go.Scatter(x=sector_data.index, y=sector_data, mode='lines', line=dict(color='blue')), row=i//2+1, col=i%2+1)
-                # Establecer las etiquetas del eje X y el título del subplot
-        fig.update_layout(xaxis_range=['2000-01-01', sectors_data.index.max()])
+        
+        # Establecer las etiquetas del eje X y el título del subplot
+        fig.update_xaxes(title_text='Fecha', dtick='M12', row=i//2+1, col=i%2+1, tickformat='%Y')
         fig.update_yaxes(title_text='Precio (USD)', row=i//2+1, col=i%2+1)
-        # Establecer el tamaño del gráfico y el título principal
-    fig.update_layout(height=1300, width=950, title='Precios de los sectores del S&P500')
-    # Mostrar el gráfico
-    st.header('Grafico de los sectores durante los ultimos 23 años.')
-    st.plotly_chart(fig)
+    
+    # Establecer el tamaño del gráfico y el título principal
+    fig.update_layout(height=1300, width=900, title='Precios de los sectores')
 
+    st.title('Grafico de precios de los ultimos 5 anos de cada sector del S&P500')
+    # Mostrar el gráfico
+    st.plotly_chart(fig)
 
 
 
